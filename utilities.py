@@ -186,14 +186,28 @@ class ff: # edode : stands for file_folder
 
 
 class networking:
-    def check_ip_address(ip_address):
+    def check_ip_address(ip_address, ipv4=True):
         """
         :param ip_address str:
         :return true: return ('ip_address', True) -> use : print(check_ip_address("192.168.1.1")[0])
                                                            to get the ip address
         """
-        regex_ip = compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}"
-                           "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
+        if subnet:
+            pass
+        if ipv4:
+            regex_ip = compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}"
+                               "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
+        else:
+            regex_ip = compile("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:"
+                               "|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}"
+                               "(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4})"
+                               "{1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:)"
+                               "{1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:"
+                               "((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|"
+                               "::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}"
+                               "(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|"
+                               "(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))")
+
         if match(regex_ip, ip_address):
             return True;
         else:
@@ -532,7 +546,7 @@ class random_return:
         return choice_rand("0123456789abcdef");
 
     def random_number(self=None):
-        return choice_rand(NUMBER);
+        return int(choice_rand(NUMBER));
 
     def random_letter(self=None):
         return choice_rand(ALPHABET_LOWER);
