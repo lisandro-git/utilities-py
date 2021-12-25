@@ -18,6 +18,7 @@ lisandro : Warning commentary or code to add etc
 interface_path  = "/sys/class/net/"
 ALPHABET_LOWER  = "abcdefghijklmnopqrstuvwxyz"
 ALPHABET_UPPER  = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+HEXADECIMAL     = "0123456789abcdef"
 NUMBER          = "0123456789"
 
 class Color:
@@ -43,7 +44,7 @@ class Color:
 
     RESET = '\033[0m'
 
-    def colored(text, color=None, on_color=None, attrs=None):
+    def colored(self, text, color=None, on_color=None, attrs=None):
         if os.getenv('ANSI_COLORS_DISABLED') is None:
             fmt_str = '\033[%dm%s'
             if color is not None:
@@ -59,39 +60,41 @@ class Color:
             text += Color.RESET
         return text;
 
-    def cprint(text, color=None, on_color=None, attrs=None, **kwargs):
+    def cprint(self, text, color=None, on_color=None, attrs=None, **kwargs):
         print((Color.colored(text, color, on_color, attrs)), **kwargs)
 
+
+
 class ff: # edode : stands for file_folder
-    def is_dir(path_to_dir: str) -> bool:
+    def is_dir(self, path_to_dir: str) -> bool:
         if os.path.isdir(path_to_dir):
             return True;
         else:
             return False;
 
-    def is_file(path_to_file: str) -> bool:
+    def is_file(self, path_to_file: str) -> bool:
         if os.path.isfile(path_to_file):
             return True;
         else:
             return False;
 
-    def create_file(path: str) -> None:
+    def create_file(self, path: str) -> None:
         return open(path, "w").close();
 
-    def create_archive(path_to_file: str) -> str:
+    def create_archive(self, path_to_file: str) -> str:
         """
         Can also be used to backup a folder
         """
         return make_archive(path_to_file, "zip", path_to_file);
 
-    def backup_file(path: str) -> str:
+    def backup_file(self, path: str) -> str:
         return copy(path, path + ".bak");
 
-    def get_extension(file_name: str) -> str:
+    def get_extension(self, file_name: str) -> str:
         filename, file_extension = os.path.splitext(file_name)
         return file_extension;
 
-    def jp(path_1: str, path_2: str) -> str:
+    def jp(self, path_1: str, path_2: str) -> str:
         """
         STANDS FOR JOIN PATH, jp is easier that os.path.join
         :param path_1 str:
@@ -100,7 +103,7 @@ class ff: # edode : stands for file_folder
         """
         return os.path.join(path_1, path_2)
 
-    def list_files(path: str) -> list:
+    def list_files(self, path: str) -> list:
         """
         lists only the files contained in a directory
         :return:
@@ -112,7 +115,7 @@ class ff: # edode : stands for file_folder
                 file_list.append(file)
         return file_list;
 
-    def list_dir(path: str) -> list:
+    def list_dir(self, path: str) -> list:
         """
 
         :param path str:
@@ -126,7 +129,7 @@ class ff: # edode : stands for file_folder
 
         return file_list;
 
-    def dict_to_json(result: dict):
+    def dict_to_json(self, result: dict):
         """
         Convert a dictionary to a json file
         :return:
@@ -139,7 +142,7 @@ class ff: # edode : stands for file_folder
 
 
 class networking:
-    def check_ip_address(ip_address: str, ipv4: bool = True) -> bool:
+    def check_ip_address(self, ip_address: str, ipv4: bool = True) -> bool:
         """
         :param ip_address str:
         :return true: return ('ip_address', True) -> use : print(check_ip_address("192.168.1.1")[0])
@@ -165,7 +168,7 @@ class networking:
         else:
             return False;
 
-    def is_connected(hostname: str = None, port_no: int = None) -> bool or str:
+    def is_connected(self, hostname: str = None, port_no: int = None) -> bool or str:
         """
         :param hostname str: it has to be an ip address
         :return bool:
@@ -189,7 +192,7 @@ class networking:
         except socket.timeout:
             return Color.cprint("[-] Connection to port " + str(port_no) + " unsuccessful", "red");
 
-    def interface_up(interface_name: str) -> bool or int: # lisandro : try it on a pure debian
+    def interface_up(self, interface_name: str) -> bool or int: # lisandro : try it on a pure debian
         """
         Works well on kali linux
         :param interface str: name of the interface : eth0/wlan0/at0...
@@ -211,13 +214,13 @@ class networking:
         except FileNotFoundError:
             return 0;
 
-    def interface_to_list(self=None) -> list:
+    def interface_to_list(self) -> list:
         interface_list = []
         for iface in os.listdir(interface_path):
             interface_list.append(iface)
         return interface_list;
 
-    def is_interface_up(interface_name: str) -> bool:
+    def is_interface_up(self, interface_name: str) -> bool:
         for iface in os.listdir(interface_path):
             if iface == interface_name:
                 if networking.interface_up(iface):
@@ -226,7 +229,7 @@ class networking:
                     return False;
         return False;
 
-    def display_interface(display_loopback: bool =None) -> None:
+    def display_interface(self, display_loopback: bool =None) -> None:
         """
         :param display_loopback bool: True if you want to display the loopback
         :return:
@@ -252,7 +255,7 @@ class networking:
                 i += 1
         return;
 
-    def return_interface(return_iface: str, return_loopback: bool =None) -> None:
+    def return_interface(self, return_iface: str, return_loopback: bool =None) -> None:
         """
         :param return_iface int:
         :return:
@@ -277,7 +280,7 @@ class networking:
                     i += 1
         return;
 
-    def display_mac(interface_name: str) -> str:
+    def display_mac(self, interface_name: str) -> str:
         """
         :param interface_name str:
         :return:
@@ -289,7 +292,7 @@ class networking:
         for i, line in enumerate(lines):
             return line;
 
-    def macchanger(interface_name: str, new_mac: str) -> bool:
+    def macchanger(self, interface_name: str, new_mac: str) -> bool:
         """
         :param interface_name str: name of the interface
         :param new_mac str: new mac address of the designated interface
@@ -302,14 +305,14 @@ class networking:
         else:
             return False;
 
-    def macchecker(mac_address: str) -> bool:
+    def macchecker(self, mac_address: str) -> bool:
         regex_mac = compile(r"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")
         if match(regex_mac, mac_address):
             return True;
         else:
             return False;
 
-    def ip_range(ip: str, addr_range: int or str) -> None:
+    def ip_range(self, ip: str, addr_range: int or str) -> None:
         temp = ""
         for i, num in enumerate(ip.split(".")):
             if i == 3:
@@ -318,7 +321,7 @@ class networking:
             temp = temp + str(num) + "."
         return;
 
-    def in_port_range(port_no: int) -> bool:
+    def in_port_range(self, port_no: int) -> bool:
         if 1 <= port_no <= 65535:
             return True;
         else:
@@ -327,7 +330,7 @@ class networking:
 
 
 class misc:  # miscellaneous
-    def animated_three_dots(text: str, number: int) -> None:
+    def animated_three_dots(self, text: str, number: int) -> None:
         """
         display a message with animated 3 dots at the end
         :param text string: string that will ve displayed
@@ -344,13 +347,13 @@ class misc:  # miscellaneous
             stdout.flush()
         return;
 
-    def clear(self=None) -> os:
+    def clear(self) -> os:
         if os.name == "posix":
             return os.system("clear");
         if os.name == "nt":
             return os.system("cls");
 
-    def uptime(self=None) -> str:
+    def uptime(self) -> str:
         """
         get uptime in hours
         :return string
@@ -363,16 +366,16 @@ class misc:  # miscellaneous
         uptime_minutes = (uptime % 3600) // 60
         return (str(str(int(uptime_hours)) + ":" + str(int(uptime_minutes))));
 
-    def endian(self=None) -> str:
+    def endian(self) -> str:
         return byteorder;
 
-    def to_binary(char: str):
+    def to_binary(self, char: str):
         return (lambda x: x != "100000", [bin(ord(c))[2:] for c in char])[1][0]
 
-    def clear_duplicates_in_list(list_to_clear: list) -> list:
+    def clear_duplicates_in_list(self, list_to_clear: list) -> list:
         return list(dict.fromkeys(list_to_clear));
 
-    def join_list(word: str, sep: str="") -> str:
+    def join_list(self, word: str, sep: str="") -> str:
         """
         :param word list: list of word that will be transformed to a single string
             input  -> join_list(["hello", "from", "the", "moon"], " ")
@@ -382,7 +385,7 @@ class misc:  # miscellaneous
         """
         return sep.join(str(x) for x in word);
 
-    def how_many_x_in_y(x: int, y:int) -> int:
+    def how_many_x_in_y(self, x: int, y:int) -> int:
         count = 0
         while True:
             if x < y:
@@ -391,7 +394,7 @@ class misc:  # miscellaneous
                 x = x - y
                 count += 1
 
-    def how_many_69(number: int) -> int: #19111999 : do I keep those ?? <- when will I reach the 500 ?
+    def how_many_69(self, number: int) -> int: #19111999 : do I keep those ?? <- when will I reach the 500 ?
         """
         Ahhh yes, the sex number
         OH YEAH
@@ -405,7 +408,7 @@ class misc:  # miscellaneous
             else:
                 return count;
 
-    def how_many_420(number: int) -> int:
+    def how_many_420(self, number: int) -> int:
         """
         Ahh yes, the weed number
         OH YEAH
@@ -419,33 +422,33 @@ class misc:  # miscellaneous
             else:
                 return count;
 
-    def swap(x: int, y: int) -> int:
+    def swap(self, x: int, y: int) -> int:
         """
         swap two variables
         """
         x, y = y, x
         return x, y;
 
-    def floor(number: float) -> int:
+    def floor(self, number: float) -> int:
         number = str(number)
         left   = int(number.split(".")[0])
         return left - 1;
 
-    def ceil(number: int) -> int:
+    def ceil(self, number: int) -> int:
         number = str(number)
         left   = int(number.split(".")[0])
         return left + 1;
 
-    def is_even(number: int) -> bool:
+    def is_even(self, number: int) -> bool:
         if number % 2 == 0:
             return True;
         else:
             return False;
 
-    def python_version(self=None) -> str:
+    def python_version(self) -> str:
         return str(version_info[0]) + "." + str(version_info[1]);
 
-    def get_exec_path(full_path: str) -> str:
+    def get_exec_path(self, full_path: str) -> str:
         """
         19111999
         returns executable (python file) path
@@ -460,7 +463,7 @@ class misc:  # miscellaneous
             temp = temp + x + "/"
         return exec_path;
 
-    def second_over_the_first(first_value: all, second_value: all, return_value: str="") -> all:
+    def second_over_the_first(self, first_value: all, second_value: all, return_value: str="") -> all:
         """
         case 1 : first = "";  second = "";  -> returns return value
         case 2 : first = "x"; second = "";  -> returns first
@@ -510,7 +513,7 @@ class misc:  # miscellaneous
 
 
 class random_return:
-    def random_int(lower: int, upper: int) -> int:
+    def random_int(self, lower: int, upper: int) -> int:
         """
         :param lower, upper int:
         :return int:
@@ -519,11 +522,11 @@ class random_return:
             lower, upper = upper, lower
         return randint(lower, upper);
 
-    def random_hex(self=None) -> str:
-        return choice_rand("0123456789abcdef");
+    def random_hex(self) -> str:
+        return choice_rand(HEXADECIMAL);
 
-    def random_number(self=None) -> int:
+    def random_number(self) -> int:
         return int(choice_rand(NUMBER));
 
-    def random_letter(self=None) -> str:
+    def random_letter(self) -> str:
         return choice_rand(ALPHABET_LOWER);
