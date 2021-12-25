@@ -126,6 +126,18 @@ class ff: # edode : stands for file_folder
 
         return file_list;
 
+    def dict_to_json(result: dict):
+        """
+        Convert a dictionary to a json file
+        :return:
+        """
+        with open("result.json", "w") as f:
+            json.dump(result, f, indent=4)
+        f.close()
+        return;
+
+
+
 class networking:
     def check_ip_address(ip_address: str, ipv4: bool = True) -> bool:
         """
@@ -312,6 +324,8 @@ class networking:
         else:
             return False;
 
+
+
 class misc:  # miscellaneous
     def animated_three_dots(text: str, number: int) -> None:
         """
@@ -347,7 +361,7 @@ class misc:  # miscellaneous
         uptime = int(float(uptime))
         uptime_hours = uptime // 3600
         uptime_minutes = (uptime % 3600) // 60
-        return (str(str(int(uptime_hours)) + ":" + str(int(uptime_minutes)))); # lisandro
+        return (str(str(int(uptime_hours)) + ":" + str(int(uptime_minutes))));
 
     def endian(self=None) -> str:
         return byteorder;
@@ -469,6 +483,31 @@ class misc:  # miscellaneous
                 return first_value;
             else:
                 return second_value;
+
+    def make_list_choice(self, choice_list: list) -> str:
+        """
+        Creates a list of choices that looks like this:
+            0) X
+            1) Y
+            2) Z
+            ...
+        Ability to type the number of the desired choice, or the name of the choice
+        :param choice_list:
+        :return str: returns the right part of the choice (here, X, Y or Z)
+        """
+        while True:
+            [print(f"{i}) {c.capitalize()}") for i, c in enumerate(choice_list)]
+            option = input(f"Which option do you want to modify ? (0-{len(choice_list) - 1}) : ")
+            try:
+                if type(int(option)):
+                    if 0 <= int(option) <= len(choice_list) - 1:
+                        return choice_list[int(option)];
+            except (SyntaxError, NameError, ValueError):
+                if option.lower() in choice_list:
+                    return option.lower();
+            print("You have to enter a valid number or a option name")
+
+
 
 class random_return:
     def random_int(lower: int, upper: int) -> int:
